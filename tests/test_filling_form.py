@@ -1,53 +1,103 @@
+import os
+
 from selene import browser, have, command
 
 
 def test_filling_form():
-    browser.open('/')
+    # Открываем страницу формы
+    browser.open('/automation-practice-form')
+
+    # Проверяем title страницы
     browser.should(have.title('DEMOQA'))
+
+    # Заполняем имя
     browser.element('#firstName').type('Demo')
+
+    # Заполняем фамилию
     browser.element('#lastName').type('QA')
+
+    # Заполняем почту
     browser.element('#userEmail').type('demoqa@demo.qa')
-    browser.element('[for="gender-radio-1"]').click()
+
+    # Выбираем пол
+    browser.element('//label[contains(text(), "Male")]').click()
+
+    # Заполняем номер телефона
     browser.element('#userNumber').type('1234567890')
+
+    # Выбираем дату рождения
     browser.element('#dateOfBirthInput').click()
     browser.element('.react-datepicker__month-select').click()
     browser.element('[value="11"]').click()
     browser.element('.react-datepicker__year-select').click()
     browser.element('[value="1988"]').click()
     browser.element('.react-datepicker__day--024').click()
+
+    # Выбираем тематику
     browser.element('#subjectsInput').type('Co')
     browser.element('//*[.="Computer Science"]').click()
-    browser.element('[for="hobbies-checkbox-3"]').click()
+
+    # Выбираем хобби
+    browser.element('//label[contains(text(), "Music")]').click()
+
+    # Загружаем изображение
+    browser.element('#uploadPicture').send_keys(os.path.abspath('resources/image.png'))
+
+    # Заполняем адрес
     browser.element('#currentAddress').type('Asia/Kolkata')
+
+    # Выбираем страну
     browser.element('#stateCity-wrapper') \
         .perform(command.js.scroll_into_view)
     browser.element('#state').click()
     browser.element('//*[.="NCR"]').click()
+
+    # Выбираем город
     browser.element('#city').click()
     browser.element('//*[.="Delhi"]').click()
+
+    # Вытаскиваем сабмит формы
     browser.element('#state').click()
     browser.element('#submit').click().press_enter()
+
+    # Проверяем наличие модального окна
     browser.element('#example-modal-sizes-title-lg') \
         .should(have.text('Thanks for submitting the form'))
-    browser.element('//td[contains(text(), "Student Name")]/following-sibling::td') \
-        .should(have.exact_text('Demo QA'))
-    browser.element('//td[contains(text(), "Student Email")]/following-sibling::td') \
-        .should(have.exact_text('demoqa@demo.qa'))
-    browser.element('//td[contains(text(), "Gender")]/following-sibling::td') \
-        .should(have.exact_text('Male'))
-    browser.element('//td[contains(text(), "Mobile")]/following-sibling::td') \
-        .should(have.exact_text('1234567890'))
-    browser.element('//td[contains(text(), "Date of Birth")]/following-sibling::td') \
-        .should(have.exact_text('24 December,1988'))
-    browser.element('//td[contains(text(), "Subjects")]/following-sibling::td') \
-        .should(have.exact_text('Computer Science'))
-    browser.element('//td[contains(text(), "Hobbies")]/following-sibling::td') \
-        .should(have.exact_text('Music'))
-    browser.element('//td[contains(text(), "Address")]/following-sibling::td') \
-        .should(have.exact_text('Asia/Kolkata'))
-    browser.element('//td[contains(text(), "State and City")]/following-sibling::td') \
-        .should(have.exact_text('NCR Delhi'))
+
+    # Проверяем заполнение имени и фамилии
+    browser.element('.table-responsive').should(have.text('Demo QA'))
+
+    # Проверяем заполнение почты
+    browser.element('.table-responsive').should(have.text('demoqa@demo.qa'))
+
+    # Проверяем заполнение пола
+    browser.element('.table-responsive').should(have.text('Male'))
+
+    # Проверяем заполнение номера телефона
+    browser.element('.table-responsive').should(have.text('1234567890'))
+
+    # Проверяем заполнение даты рождения
+    browser.element('.table-responsive').should(have.text('24 December,1988'))
+
+    # Проверяем заполнение тематики
+    browser.element('.table-responsive').should(have.text('Computer Science'))
+
+    # Проверяем заполнение хобби
+    browser.element('.table-responsive').should(have.text('Music'))
+
+    # Проверяем название загруженного изображения
+    browser.element('.table-responsive').should(have.text('image.png'))
+
+    # Проверяем заполнение адреса
+    browser.element('.table-responsive').should(have.text('Asia/Kolkata'))
+
+    # Проверяем заполнение страны и города
+    browser.element('.table-responsive').should(have.text('NCR Delhi'))
+
+    # Закрыаем модальное окно
     browser.element('#closeLargeModal') \
         .perform(command.js.scroll_into_view).click()
+
+    # Проверяем отсутствие модального окна
     browser.element('#example-modal-sizes-title-lg') \
         .should(have.no.text('Thanks for submitting the form'))
