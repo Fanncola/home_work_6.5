@@ -10,7 +10,7 @@ def test_filling_form():
     browser.element('#firstName').type('Demo')
     browser.element('#lastName').type('QA')
     browser.element('#userEmail').type('demoqa@demo.qa')
-    browser.element('//label[contains(text(), "Male")]').click()
+    browser.element('[name=gender][value=Male]').click()
     browser.element('#userNumber').type('1234567890')
     browser.element('#dateOfBirthInput').click()
     browser.element('.react-datepicker__month-select').click()
